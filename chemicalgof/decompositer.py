@@ -46,7 +46,8 @@ def Mol2GoF (mol:Chem.Mol, pattBonds:str = SINGLEXOCYCLICPATT, ) -> DiGraphFrags
 
         # define directed reduced graph
         diG=DiGraphFrags()
-        diG.add_node(FragNode.fromSmiles(s))
+        if s != "":
+            diG.add_node(FragNode.fromSmiles(s))
         return diG
 
     bondMatches = np.array(bondMatches)

@@ -35,6 +35,8 @@ def CanonizeFragWithDummies(m1):
     m2,aIdxsMap1=CanonizeMol(m1,True)
     aIdxs2=[a.GetIdx() for a in m2.GetAtoms() if a.GetAtomicNum()!=0 ]
     m3=Chem.RemoveAllHs(  Chem.ReplaceSubstructs(m2, Chem.MolFromSmiles("*"), Chem.MolFromSmiles("[H]"), replaceAll=True)[0]  )
+    if m3.GetNumAtoms() == 0:
+        return m3, {}
     aIdxs3=[a.GetIdx() for a in m3.GetAtoms() if a.GetAtomicNum()!=0 ]
     
     tmp={ k:aIdxs3[aIdxs2.index(v)] for k,v in aIdxsMap1.items() if v in aIdxs2}
