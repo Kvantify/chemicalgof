@@ -1,3 +1,7 @@
+from itertools import product
+
+import numpy as np
+
 from .classes import FragNode, GraphFrags, DiGraphFrags
 import networkx as nx, itertools
 
@@ -31,23 +35,32 @@ class TokenPath(list):
     def __init__(self, iterable):
         super().__init__(Token(item) if type(item)!=Token else item for item in iterable)
 
-    def getSequence(self):
+    def getSequence(self) -> tuple[list[str], list[FragNode]]:
         ret=[]
-        for t in self:
+        frag_nodes=[]
+        for i, t in enumerate(self):
+            old_len = len(ret)
             if t.prec!=None:
                 ret.append(f"<{t.prec}>")
             ret.append(str(t))
             if t.succ!=None:
                 ret.append(f"<{t.succ}>")
+            frag_nodes += ([t.frag] * (len(ret) - old_len))
             if t.branches:
                 if t.branchesLinkers:
                     for p,l in zip(t.branches, t.branchesLinkers):
                         ret.append(f"<{l}>")
-                        ret+=["(",*p.getSequence(),")"]
+                        frag_nodes.append(t.frag)
+                        branch_seq, branch_frag_nodes = p.getSequence()
+                        ret+=["(",*branch_seq,")"]
+                        frag_nodes+=[t.frag,*branch_frag_nodes,t.frag]
                 else:
                     for p in t.branches:
-                        ret+=["(",*p.getSequence(),")"]
-        return ret
+                        branch_seq, branch_frag_nodes = p.getSequence()
+                        ret+=["(",*branch_seq,")"]
+                        frag_nodes+=[t.frag,*branch_frag_nodes,t.frag]
+            
+        return ret, frag_nodes
 
     def getString(self):
         ret=""

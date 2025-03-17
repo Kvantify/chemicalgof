@@ -100,7 +100,7 @@ T=CanonicalGoF2Tokens(DiG)
 
 ```python
 ### then get sequence of tokens for fragments and bonds
-fragsmi = T.getSequence()
+fragsmi = T.getSequence()[0]
 
 ## or simply each fragment and its bonds splitted by dots
 fragsmi = T.getString()

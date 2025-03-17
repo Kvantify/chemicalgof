@@ -117,7 +117,7 @@ def Sequence2String(arr):
     return "".join(ret)
 
 def String2Sequence(s):
-    return String2Tokens(s).getSequence()
+    return String2Tokens(s).getSequence()[0]
 
 def Sequence2Smiles(x):
     try:

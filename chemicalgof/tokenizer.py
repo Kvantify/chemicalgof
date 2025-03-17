@@ -1,8 +1,11 @@
 import itertools
-import numpy as np
-import networkx as nx
-from .tokens import TokenPath
 import random
+
+import networkx as nx
+import numpy as np
+
+from .tokens import TokenPath
+
 secure_random = random.SystemRandom()
 
 
@@ -89,9 +92,9 @@ def groupFragsByType(paths):
     return groups
 
 
-def buildBranches(mainDiG, mainG, mainPath, ascendent=None, canonizing=False):
+def buildBranches(mainDiG, mainG, mainPath, ascendent=None, canonizing=False) -> TokenPath:
     tokenP=TokenPath(mainPath)
-
+    
     for pos,(n,t) in enumerate(zip(mainPath, tokenP)):
         if n.numPotAtomLinkers > 1:
             if pos==0 and ascendent!=None:
@@ -191,7 +194,7 @@ def sortBranches(G, paths):
 
     
 # canonization of main path and secondary ones
-def CanonicalGoF2Tokens(mainDiG):
+def CanonicalGoF2Tokens(mainDiG) -> TokenPath| None:
     mainG = mainDiG.to_undirected()
 
     if mainDiG.number_of_nodes() == 1:
@@ -251,8 +254,6 @@ def CanonicalGoF2Tokens(mainDiG):
             else:
                 _inds=grpByType[_minSum]
             longests=longests[ _inds ]
-            
-            grpByType=groupFragsByType(longests)
 
     grpByType=groupFragsByType(longests)
 
